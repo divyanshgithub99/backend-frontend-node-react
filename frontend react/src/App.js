@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const App = () => {
   const [signupData, setSignupData] = useState({
@@ -14,21 +15,13 @@ const App = () => {
 
   const handleSignup = async () => {
     try {
-      const response = await fetch('http://localhost:6000/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
-        body: JSON.stringify(signupData),
-      });
-
-      if (response.ok) {
+      const response = await axios.post('http://localhost:8080/http://localhost:6000/signup', signupData);
+      
+      if (response.status === 200) {
         // User successfully signed up
         console.log('User signed up successfully');
       } else {
-        const data = await response.json();
-        console.error('Error signing up:', data.message);
+        console.error('Error signing up:', response.data.message);
       }
     } catch (error) {
       console.error('Error signing up:', error);
@@ -37,20 +30,13 @@ const App = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://localhost:6000/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(loginData),
-      });
-
-      if (response.ok) {
+      const response = await axios.post('http://localhost:8080/http://localhost:6000/login', loginData);
+      
+      if (response.status === 200) {
         // User successfully logged in
         console.log('User logged in successfully');
       } else {
-        const data = await response.json();
-        console.error('Error logging in:', data.message);
+        console.error('Error logging in:', response.data.message);
       }
     } catch (error) {
       console.error('Error logging in:', error);

@@ -1,18 +1,19 @@
 const express = require('express');
-const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
-
+const startCorsAnywhere = require('./cors-anywhere'); // Import the function
+require('dotenv').config();
 
 // Use CORS middleware
 // app.use(cors());
-app.use(cors({
-  origin: '*',
-}));
+// app.use(cors({
+//   origin: 'http://localhost:3000/', // Replace with your frontend URL
+//   credentials: true, // if your frontend is sending credentials (like cookies)
+// }));
 
 
 const userRoutes = require('./routes/userRoutes');
-const { mongoURI } = require('./config');
+const { mongoURI, port } = require('./config');
 
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
@@ -24,9 +25,10 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use(express.json());
 app.use(userRoutes);
 
-const PORT = process.env.PORT || 6000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+startCorsAnywhere();
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
 
 
